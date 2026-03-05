@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+meta
+  name: fastapi-multiplier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-multiplier
+  template:
+    meta
+      labels:
+        app: fastapi-multiplier
+    spec:
+      containers:
+      - name: api-container
+        image: fastapi-app:v1
+        ports:
+        - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 5
